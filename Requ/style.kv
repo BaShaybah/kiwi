@@ -1,0 +1,381 @@
+#:import os os
+#:import color kivy.utils.get_color_from_hex
+#:import NoTransition kivy.uix.screenmanager.NoTransition
+#:import random random.random
+
+Screen:
+	canvas.before:
+		Color:
+			rgba:color("#E3F2FD") 
+		Rectangle:
+			pos:self.pos
+			size:self.size
+			
+	Xxtopappyy:
+		pos_hint:{"center_x":.5,"top":1} if sm.current == "uiscreen" or sm.current == "uscreen" else {"center_x":.5,"y":1}
+		Label:
+			markup:True 
+			color:0,0,0,0.6
+			text:"Projects" if sm.current == "uiscreen" else "Setup"
+			font_size:"15dp"
+			font_name:"assets/font/Nasalization.ttf"
+			size_hint: None, None 
+			width:"26dp"
+			height:self.texture_size[1]
+			pos_hint:{"center_x":.5,"center_y":0.16}
+	
+	ScreenManager:
+		id:sm
+		transition:NoTransition()
+		
+		Xxuiscreenyy:
+			name:"uiscreen"
+			
+		Xxuscreenyy:
+			name:"uscreen"
+			
+		Screen:
+			id:view
+			name:"view"
+			 
+	Xxbarappyy:
+		id:bottom
+		pos_hint:{"center_x":.5,"y":0} if sm.current == "uiscreen" or sm.current == "uscreen" else {"center_x":.5,"top":0}
+		
+
+
+<Xxbarappyy>:
+	size_hint:1,None
+	height:"70dp"
+	pos_hint:{"center_x":.5,"y":0}
+	canvas.before:
+		Color:
+			rgba:1,1,1,1
+		Rectangle:
+			pos:self.pos 
+			size:self.size 
+			
+	Xxbariconyy:
+		index:0
+		text:"Projects"
+		icon:"xml"
+		bg_color:color("#2196F3")
+		ic_color:1,1,1,1
+		pos_hint:{"center_x":.3,"center_y":0.5}
+		on_release:
+			root.parent.ids.sm.current = "uiscreen" 
+	
+	Xxbariconyy:
+		text:"Settings" 
+		index:1
+		icon:"cogs"
+		bg_color:1,1,1,0
+		pos_hint:{"center_x":.7,"center_y":0.5}
+		on_release:
+			root.parent.ids.sm.current = "uscreen" 
+
+<Xxbariconyy>:
+	size_hint:None, None 
+	size:"75dp", "40dp" 
+	pos_hint:{"center_x":.5,"center_y":0.75}
+	on_release:
+		root.check(self)
+		
+	canvas.before:
+		Color:
+			rgba:root.bg_color
+		RoundedRectangle:
+			pos:self.pos
+			size:self.size
+			radius:[self.height/2,]
+			
+	Xxiconyy:
+		color:root.ic_color
+		icon:root.icon
+		halign:"center"
+		pos_hint:{"center_x":.5,"center_y":.5}
+	
+
+
+<Xxcardyy>
+	size_hint_y:None
+	height:"120dp"
+	pos_hint:{"center_x":.5,"center_y":.5}
+	on_release:
+		app.heat_pro(self)
+		
+	canvas.before:
+		Color:
+			rgba:1,1,1,1
+		RoundedRectangle:
+			pos:self.pos
+			size:self.size
+			radius:[24,] 
+		
+	BoxLayout:
+		padding:25
+		orientation:"vertical" 
+		spacing:10 
+		pos_hint:{"center_x":.5,"center_y":.5}
+		Label:
+			size_hint:None, None
+			size:"62dp","62dp"
+			font_size:"36dp" 
+			color:1,1,1,1 
+			id:ic
+			font_name:"assets/font/Nasalization.ttf"
+			text:str(root.text[:2]).upper()
+			pos_hint:{"center_x":.5,"center_y":.5}
+			canvas.before:
+				Color:
+					hsv:[random(), random(), random()] 
+				RoundedRectangle:
+					pos:self.pos 
+					size:self.size 
+					radius:[15,] 
+		Label:
+			id:lbl
+			halign:"left"
+			color:0,0,0,0.6
+			text:root.text
+			font_size:"16dp"
+			font_name:"assets/font/Nasalization.ttf"
+			size_hint:None,None
+			size:self.texture_size
+			pos_hint:{"center_x":.5,"center_y":.5}
+		
+		
+		
+	
+		
+<Xxcreateitemyy>:
+	size_hint:1,None 
+	height:self.minimum_height
+	spacing:"10dp"
+	orientation:"vertical"
+	pos_hint:{"center_x":.5,"center_y":.5}
+	BoxLayout:
+		padding:15
+		orientation:"vertical" 
+		spacing:25
+		size_hint:1,None
+		height:self.minimum_height
+		canvas.before:
+			Color:
+				rgba:1,1,1,1 
+			RoundedRectangle:
+				pos:self.pos 
+				size:self.size
+				radius:[36,] 
+		Xxgrafiyy:
+			bold:True 
+			text:"Create New Project"
+		Xxtextinyy:
+			id:txt
+			hinter:"Project Name"
+			pos_hint:{"center_x":.5,"center_y":0.5}
+		Xxraisedbtnyy:
+			pos_hint:{"right":.95,"y":0.07}
+			on_release:
+				app.create_project(txt.text)
+				
+	BoxLayout:
+		padding:20
+		orientation:"vertical" 
+		spacing:25
+		size_hint:1,None
+		height:self.minimum_height
+		canvas.before:
+			Color:
+				rgba:1,1,1,1 
+			RoundedRectangle:
+				pos:self.pos 
+				size:self.size
+				radius:[36,] 
+			
+		Xxgrafiyy:
+			bold:True 
+			text:"Create New Widget"
+		Xxtextinyy:
+			id:txt1
+			hinter:"Project Name"
+			
+		Xxtextinyy:
+			id:txt2
+			hinter:"Widget Name"
+			
+		Xxraisedbtnyy:
+			pos_hint:{"right":.95,"y":0.05}
+			on_release:
+				app.create_widget(txt1.text, txt2.text)
+			
+<Xxgrafiyy@Label>:
+	bold:True 
+	color:0,0,0,1 
+	font_name:"assets/font/Noto.ttf"
+	size_hint:0.9, None
+	pos_hint:{"center_x":.5,"center_y":.85}
+	height:self.texture_size[1]+50
+		
+<Xxtextinyy@FloatLayout>:
+	hinter:""
+	text:""
+	size_hint:0.9, None
+	pos_hint:{"center_x":.5,"center_y":0.6}
+	height :"50dp"
+	canvas.before:
+		Color:
+			rgba:0,0,0,.07
+		RoundedRectangle:
+			pos:self.pos
+			size:self.size
+			radius:[24,] 
+			
+	TextInput:
+		hint_text_color:0,0,0,0.6
+		
+		cursor_color:color("#2196F3") 
+		multiline:False 
+		size_hint:.9,None
+		height:"30dp"
+		hint_text:root.hinter
+		font_name:"assets/font/Noto.ttf" 
+		pos_hint:{"center_x":.5,"center_y":0.5}
+		background_color:0,0,0,0
+		on_text:
+			root.text = self.text
+<Xxerrorscreenyy>:
+	id:src
+	text:""
+	canvas.before:
+		Color:
+			rgba:1,1,1,1
+		Rectangle:
+			pos:self.pos
+			size:self.size
+	
+	BoxLayout:
+		ScrollView:
+			effect_cls:"ScrollEffect"
+			BoxLayout:
+				padding:"10dp"
+				size_hint:None,None
+				size: self.minimum_size
+				
+				Label:
+					id:lbl
+					halign:"left"
+					color:1,0,0,1
+					text:src.text
+					size_hint:None,None
+					size:self.texture_size		
+
+<Xxiconyy> :
+	size_hint:None,None
+	size:60,60
+	font_size:"25dp"
+	font_name:"assets/font/materialdesign.ttf"
+	text:self.icons.get(self.icon) if self.icon in self.icons.keys() else ""
+	halign:"center"
+	markup:True
+	
+	canvas.before:
+		Color:
+			rgba:[1,1,1,0] if self.icon in self.icons.keys() else [1,1,1,1]
+		RoundedRectangle:
+			pos:self.pos
+			size:self.size
+			source:self.icon
+			
+<Xxraisedbtnyy>:
+	size_hint:None, None 
+	size:"70dp", "40dp"
+	pos_hint:{"center_x":.5,"center_y":.5}
+	canvas.before:
+		Color:
+			rgba:color("#2196F3")
+		RoundedRectangle:
+			pos:self.pos
+			size:self.size
+			radius:[15,]
+	Label:
+		pos_hint:{"center_x":.5,"center_y":.5}
+		color:1,1,1,1 
+		text:"Create"
+		halign:"center"
+
+<Xxtopappyy>:
+	id:topbar
+	size_hint:1,None 
+	height:"120dp"
+	pos_hint:{"center_x":.5,"top":1}
+	canvas.before:
+		Color:
+			rgba:1,1,1,1
+		Ellipse:
+			pos:self.pos[0]-self.size[0]*4,self.pos[1]
+			size:[self.size[0]*9]*2
+			
+	Label:
+		markup:True 
+		halign:"left" 
+		color:0,0,0,1
+		text:"[color=#2196F3][size=80]K[/color][/size]iw[color=#2196F3][size=60]i[/color][/size]"
+		font_size:"34dp"
+		font_name:"assets/font/Nasalization.ttf"
+		size_hint: None, None 
+		width:"100dp" 
+		height:self.texture_size[1]
+		pos_hint:{"center_x":.5,"center_y":0.53}
+	
+	
+
+<Xxuiscreenyy>:
+	on_kv_post:app.update_cards(grid)
+	BoxLayout:
+		pos_hint:{"center_x":0.5}
+		y:150
+		size_hint:None,None 
+		size:root.width - 40,root.height-400
+		canvas.before:
+			Color:
+				rgba:1,0,0,0
+			RoundedRectangle:
+				pos:self.pos
+				size:self.size
+				radius:[16,] 
+		ScrollView:
+			bar_color:0,0,0,0
+			bar_inactive_color:0,0,0,0
+			GridLayout:
+				padding:10
+				spacing:25
+				id:grid
+				cols:2
+				size_hint_y:None 
+				height:self.minimum_height
+
+<Xxuscreenyy>:
+	BoxLayout:
+		padding:10
+		pos_hint:{"center_x":0.5}
+		y:150
+		size_hint:None,None 
+		size:root.width - 40,root.height - 400
+		canvas.before:
+			Color:
+				rgba:1,0,0,0
+			RoundedRectangle:
+				pos:self.pos
+				size:self.size
+				radius:[16,] 
+		ScrollView:
+			bar_color:0,0,0,0
+			bar_inactive_color:0,0,0,0
+			Xxcreateitemyy:
+			
+		
+	    
+			
+	
+
