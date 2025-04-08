@@ -3,8 +3,6 @@ name: Build Android APK
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
   build:
@@ -19,30 +17,33 @@ jobs:
       with:
         python-version: '3.10'
 
-    - name: Install dependencies
+    - name: Install buildozer and dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install buildozer cython
+        sudo apt update
+        sudo apt install -y zip unzip openjdk-17-jdk wget
+        pip install --upgrade pip
+        pip install cython buildozer
 
-    - name: Install Android SDK & Build Tools
+    - name: Install Android SDK
       run: |
-        sudo apt-get update
-        sudo apt-get install -y openjdk-17-jdk unzip wget
         mkdir -p $HOME/android-sdk
-        wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O cmdline-tools.zip
-        unzip cmdline-tools.zip -d $HOME/android-sdk/
-        mv $HOME/android-sdk/cmdline-tools $HOME/android-sdk/cmdline-tools-temp
-        mkdir -p $HOME/android-sdk/cmdline-tools/latest
-        mv $HOME/android-sdk/cmdline-tools-temp/* $HOME/android-sdk/cmdline-tools/latest/
+        cd $HOME/android-sdk
+        wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O tools.zip
+        unzip tools.zip -d cmdline-tools
+        mkdir -p cmdline-tools/latest
+        mv cmdline-tools/cmdline-tools/* cmdline-tools/latest/
         
         export ANDROID_SDK_ROOT=$HOME/android-sdk
-        export PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/emulator:$PATH
-        
+        export PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH
+
         yes | sdkmanager --licenses
         sdkmanager "platforms;android-34" "build-tools;34.0.0" "platform-tools"
 
+    - name: Set Environment Variables
+      run: |
+        echo "ANDROID_SDK_ROOT=$HOME/android-sdk" >> $GITHUB_ENV
+        echo "PATH=$HOME/android-sdk/build-tools/34.0.0:$HOME/android-sdk/platform-tools:$PATH" >> $GITHUB_ENV
+
     - name: Build APK
-      env:
-        ANDROID_SDK_ROOT: ${{ github.workspace }}/.buildozer/android/platform/android-sdk
       run: |
         buildozer android debug
