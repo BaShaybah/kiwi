@@ -27,7 +27,7 @@ jobs:
             libgl1-mesa-dev libegl1-mesa-dev \
             libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev \
             libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev \
-            zlib1g-dev libgstreamer1.0 libgstreamer1.0-dev \
+            zlib1g-dev libgstreamer1.0-0 libgstreamer1.0-dev \
             libmtdev-dev xclip xsel libjpeg-dev
 
       - name: Install buildozer and cython
